@@ -83,22 +83,37 @@
                 document.addEventListener('DOMContentLoaded', function () {
                     console.log("Page loaded!");
 
-                    // 2. Récupérer les éléments HTML
+                    // Récupérer les éléments HTML
                     const heroSection = document.getElementById('heros');
                     const gameSection = document.getElementById('game');
-                    const startGameBtn = document.querySelector('a[href="#game"]'); // Le bouton de la page d'accueil
+                    const startGameBtn = document.querySelector('a[href="#game"]');
+                    const startBattleBtn = document.getElementById('button-start');
 
-                    // 3. Fonction pour changer de section
+                    // Fonction pour changer de section
                     function showGameSection() {
-                        heroSection.style.display = 'none';  // Cacher la page d'accueil
-                        gameSection.style.display = 'block'; // Montrer le jeu
+                        heroSection.style.display = 'none';
+                        gameSection.style.display = 'block';
                     }
 
-                    // 4. Écouter le clic sur "Start Game"
+                    // Fonction pour démarrer une bataille
+                    async function startNewBattle() {
+                        try {
+                            const response = await fetch('/game/start'); // PAS /api/game/start
+                            const data = await response.json();
+                            console.log('New battle started:', data);
+                            // TODO: afficher les données dans l'interface
+                        } catch (error) {
+                            console.error('Error starting new battle:', error);
+                        }
+                    }
+
+                    // Event listeners
                     startGameBtn.addEventListener('click', function (e) {
-                        e.preventDefault(); // Empêche le comportement par défaut du lien
+                        e.preventDefault();
                         showGameSection();
                     });
+
+                    startBattleBtn.addEventListener('click', startNewBattle);
                 });
             </script>
            

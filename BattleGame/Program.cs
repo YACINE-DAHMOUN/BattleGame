@@ -16,4 +16,6 @@ app.UseAuthorization();
 // Map les controllers
 app.MapControllers();
 
+app.MapFallbackToFile("index.html"); // Pour les applications SPA
+
 app.Run();
