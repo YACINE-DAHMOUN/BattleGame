@@ -1,18 +1,19 @@
-﻿using System;
-using BattleGame.Models;
+﻿using BattleGame.Models;
 
-class Program
-{
-    static void Main(string[] args)
-    {
-        Console.WriteLine("=== Battle Game ===");
-        Console.Write("Entre le nom de ton héros: ");
-        string name = Console.ReadLine();
+var builder = WebApplication.CreateBuilder(args);
 
-        Heros hero = new Heros(1, name);
-        Enemy enemy = new Enemy(1, "Goblin");
+// Ajoute les services nécessaires pour les controllers
+builder.Services.AddControllers();
 
-        Game game = new Game(hero, enemy);
-        game.Start();
-    }
-}
+var app = builder.Build();
+
+// Sert les fichiers statiques dans wwwroot
+app.UseStaticFiles();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+
+// Map les controllers
+app.MapControllers();
+
+app.Run();

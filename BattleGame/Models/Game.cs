@@ -1,54 +1,101 @@
 using System;
 using BattleGame.Models;
 
-public class Game
+namespace BattleGame.Models
 {
-    private Heros hero;
-    private Enemy enemy;
-
-    public Game(Heros hero, Enemy enemy)
+    public class Game
     {
-        this.hero = hero;
-        this.enemy = enemy;
-    }
+        // Propriétés publiques pour l'accès depuis le contrôleur
+        public Heros Hero { get; private set; }
+        public Enemy Enemy { get; private set; }
 
-    public void Start()
-    {
-        Console.WriteLine($"Un {enemy.Name} apparaît avec {enemy.Health} PV !");
-
-        while (hero.Health > 0 && enemy.Health > 0)
+        public Game(Heros hero, Enemy enemy)
         {
-            Console.WriteLine("\nQue veux-tu faire ?");
-            Console.WriteLine("1 - Attaquer");
-            Console.WriteLine("2 - Se soigner");
-            Console.Write("> ");
-            string choice = Console.ReadLine();
+            this.Hero = hero;
+            this.Enemy = enemy;
+        }
 
-            switch (choice)
+        // Méthode pour l'attaque du héros
+        public void HeroAttack()
+        {
+            if (Enemy.Health > 0)
             {
-                case "1":
-                    enemy.Health -= hero.Attack;
-                    Console.WriteLine($"{hero.Name} attaque et inflige {hero.Attack} dégâts. PV ennemi = {enemy.Health}");
-                    break;
-                case "2":
-                    hero.Health += 20;
-                    Console.WriteLine($"{hero.Name} se soigne. PV = {hero.Health}");
-                    break;
-                default:
-                    Console.WriteLine("Choix invalide !");
-                    break;
-            }
+                int damage = Math.Max(1, Hero.Attack - Enemy.Defense); // Au minimum 1 dégât
+                Enemy.Health -= damage;
+                Console.WriteLine($"{Hero.Name} attaque et inflige {damage} dégâts. PV ennemi = {Enemy.Health}");
 
-            if (enemy.Health > 0)
-            {
-                hero.Health -= enemy.Attack;
-                Console.WriteLine($"{enemy.Name} attaque et inflige {enemy.Attack} dégâts. PV héros = {hero.Health}");
+                // L'ennemi contre-attaque s'il est encore vivant
+                if (Enemy.Health > 0)
+                {
+                    EnemyAttack();
+                }
             }
         }
 
-        if (hero.Health <= 0)
-            Console.WriteLine("?? Tu es mort !");
-        else
-            Console.WriteLine($"?? Tu as vaincu {enemy.Name} !");
+        // Méthode pour le soin du héros
+        public void HeroHeal()
+        {
+            int healAmount = 20;
+            Hero.Health += healAmount;
+            Console.WriteLine($"{Hero.Name} se soigne de {healAmount} PV. PV = {Hero.Health}");
+
+            // L'ennemi attaque après le soin
+            if (Enemy.Health > 0)
+            {
+                EnemyAttack();
+            }
+        }
+
+        // Attaque de l'ennemi (privée)
+        private void EnemyAttack()
+        {
+            if (Hero.Health > 0 && Enemy.Health > 0)
+            {
+                int damage = Math.Max(1, Enemy.Attack - Hero.Defense); // Au minimum 1 dégât
+                Hero.Health -= damage;
+                Console.WriteLine($"{Enemy.Name} attaque et inflige {damage} dégâts. PV héros = {Hero.Health}");
+            }
+        }
+
+        // Méthode pour vérifier l'état du jeu
+        public string GetGameState()
+        {
+            if (Hero.Health <= 0)
+                return "Défaite ! Le héros est mort.";
+            else if (Enemy.Health <= 0)
+                return $"Victoire ! {Enemy.Name} a été vaincu !";
+            else
+                return "Combat en cours...";
+        }
+
+        // Version console du jeu (méthode originale)
+        public void Start()
+        {
+            Console.WriteLine($"Un {Enemy.Name} apparaît avec {Enemy.Health} PV !");
+
+            while (Hero.Health > 0 && Enemy.Health > 0)
+            {
+                Console.WriteLine("\nQue veux-tu faire ?");
+                Console.WriteLine("1 - Attaquer");
+                Console.WriteLine("2 - Se soigner");
+                Console.Write("> ");
+                string? choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        HeroAttack();
+                        break;
+                    case "2":
+                        HeroHeal();
+                        break;
+                    default:
+                        Console.WriteLine("Choix invalide !");
+                        break;
+                }
+            }
+
+            Console.WriteLine(GetGameState());
+        }
     }
 }

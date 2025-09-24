@@ -1,0 +1,15 @@
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\bin\Debug\net9.0\BattleGame.exe
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\bin\Debug\net9.0\BattleGame.deps.json
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\bin\Debug\net9.0\BattleGame.runtimeconfig.json
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\bin\Debug\net9.0\BattleGame.dll
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\bin\Debug\net9.0\BattleGame.pdb
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\BattleGame.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\BattleGame.AssemblyInfoInputs.cache
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\BattleGame.AssemblyInfo.cs
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\BattleGame.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\BattleGame.sourcelink.json
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\BattleGame.dll
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\refint\BattleGame.dll
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\BattleGame.pdb
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\BattleGame.genruntimeconfig.cache
+C:\Users\Admin\Desktop\Projet-Mini-jeu\BattleGame\obj\Debug\net9.0\ref\BattleGame.dll
