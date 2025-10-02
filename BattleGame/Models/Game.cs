@@ -1,33 +1,64 @@
 using System;
-using BattleGame.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BattleGame.Models
 {
     public class Game
     {
-        // Propriétés publiques pour l'accès depuis le contrôleur
-        public Heros Hero { get; private set; }
-        public Enemy Enemy { get; private set; }
+        [Key]
+        public int Id { get; set; }
 
-        public Game(Heros hero, Enemy enemy)
+        // Foreign keys
+        public int? HeroId { get; set; }
+        public int? EnemyId { get; set; }
+
+        // Propriétés publiques pour l'accès depuis le contrôleur
+        [ForeignKey("HeroId")]
+        public virtual Hero? Hero { get; set; }
+        
+        [ForeignKey("EnemyId")]
+        public virtual Enemy? Enemy { get; set; }
+
+        // Pour stocker les résultats du jeu
+        public bool? PlayerWon { get; set; }
+        public int TurnCount { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        
+        // Constructeur par défaut pour Entity Framework
+        public Game()
+        {
+        }
+
+        // Constructeur pour le jeu
+        public Game(Hero hero, Enemy enemy)
         {
             this.Hero = hero;
             this.Enemy = enemy;
+            HeroId = hero.Id;
+            EnemyId = enemy.Id;
+            TurnCount = 0;
+            CreatedAt = DateTime.Now;
         }
 
         // Méthode pour l'attaque du héros
         public void HeroAttack()
         {
-            if (Enemy.Health > 0)
+            if (Enemy != null && Enemy.Health > 0)
             {
-                int damage = Math.Max(1, Hero.Attack - Enemy.Defense); // Au minimum 1 dégât
-                Enemy.Health -= damage;
-                Console.WriteLine($"{Hero.Name} attaque et inflige {damage} dégâts. PV ennemi = {Enemy.Health}");
-
-                // L'ennemi contre-attaque s'il est encore vivant
-                if (Enemy.Health > 0)
+                TurnCount++;
+                int damage = Math.Max(5, Hero.Attack - Enemy.Defense);
+                Enemy.Health = Math.Max(0, Enemy.Health - damage); // Empêche négatif
+                
+                if (Enemy.Health <= 0)
                 {
-                    EnemyAttack();
+                    // Gérer la victoire
+                    PlayerWon = true;
+                    if (Hero != null)
+                    {
+                        Hero.TotalWins++;
+                        Hero.Experience += 50;
+                    }
                 }
             }
         }
@@ -35,67 +66,35 @@ namespace BattleGame.Models
         // Méthode pour le soin du héros
         public void HeroHeal()
         {
-            int healAmount = 20;
-            Hero.Health += healAmount;
-            Console.WriteLine($"{Hero.Name} se soigne de {healAmount} PV. PV = {Hero.Health}");
-
-            // L'ennemi attaque après le soin
-            if (Enemy.Health > 0)
+            if (Hero != null)
             {
-                EnemyAttack();
+                TurnCount++;
+                int healAmount = 20;
+                Hero.CurrentHealth = Math.Min(Hero.MaxHealth, Hero.CurrentHealth + healAmount);
+                
+                // L'ennemi attaque après le soin
+                if (Enemy != null && Enemy.Health > 0)
+                {
+                    EnemyAttack();
+                }
             }
         }
-
+        
         // Attaque de l'ennemi (privée)
         private void EnemyAttack()
         {
-            if (Hero.Health > 0 && Enemy.Health > 0)
+            if (Hero != null && Enemy != null && Hero.CurrentHealth > 0 && Enemy.Health > 0)
             {
-                int damage = Math.Max(1, Enemy.Attack - Hero.Defense); // Au minimum 1 dégât
-                Hero.Health -= damage;
-                Console.WriteLine($"{Enemy.Name} attaque et inflige {damage} dégâts. PV héros = {Hero.Health}");
-            }
-        }
-
-        // Méthode pour vérifier l'état du jeu
-        public string GetGameState()
-        {
-            if (Hero.Health <= 0)
-                return "Défaite ! Le héros est mort.";
-            else if (Enemy.Health <= 0)
-                return $"Victoire ! {Enemy.Name} a été vaincu !";
-            else
-                return "Combat en cours...";
-        }
-
-        // Version console du jeu (méthode originale)
-        public void Start()
-        {
-            Console.WriteLine($"Un {Enemy.Name} apparaît avec {Enemy.Health} PV !");
-
-            while (Hero.Health > 0 && Enemy.Health > 0)
-            {
-                Console.WriteLine("\nQue veux-tu faire ?");
-                Console.WriteLine("1 - Attaquer");
-                Console.WriteLine("2 - Se soigner");
-                Console.Write("> ");
-                string? choice = Console.ReadLine();
-
-                switch (choice)
+                int damage = Math.Max(1, Enemy.Attack - Hero.Defense);
+                Hero.CurrentHealth = Math.Max(0, Hero.CurrentHealth - damage);
+                
+                if (Hero.CurrentHealth <= 0)
                 {
-                    case "1":
-                        HeroAttack();
-                        break;
-                    case "2":
-                        HeroHeal();
-                        break;
-                    default:
-                        Console.WriteLine("Choix invalide !");
-                        break;
+                    // Gérer la défaite
+                    PlayerWon = false;
+                    Hero.TotalLosses++;
                 }
             }
-
-            Console.WriteLine(GetGameState());
         }
     }
 }

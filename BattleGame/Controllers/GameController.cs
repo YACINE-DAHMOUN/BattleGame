@@ -8,14 +8,14 @@ namespace BattleGame.Controllers
 	[Route("[controller]")]
 	public class GameController : ControllerBase
 	{
-		private static Game currentGame;
+		private static Game? currentGame; // Rendre nullable pour éviter le warning CS8618
 
 		// Démarrage du jeu
 		[HttpGet("start")]
 		public IActionResult StartGame()
 		{
-			Heros hero = new Heros(1, "Archer");   // Stats aléatoires
-			Enemy enemy = new Enemy(1, "Goblin");  // Stats aléatoires
+			Hero hero = new Hero("Archer");   // Ceci est correct
+			Enemy enemy = new Enemy(1, "Goblin");  // Correction: Enemy a besoin d'un id et d'un nom
 
 			currentGame = new Game(hero, enemy);
 

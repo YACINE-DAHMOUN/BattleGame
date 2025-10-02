@@ -81,29 +81,50 @@
 
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
-                    console.log("Page loaded!");
-
-                    // Récupérer les éléments HTML
+                    // Récupération des éléments
                     const heroSection = document.getElementById('heros');
                     const gameSection = document.getElementById('game');
                     const startGameBtn = document.querySelector('a[href="#game"]');
                     const startBattleBtn = document.getElementById('button-start');
+                    const attackBtn = document.getElementById('attack-button');
+                    const healBtn = document.getElementById('heal-button'); 
 
-                    // Fonction pour changer de section
+
+                    // Fonctions
                     function showGameSection() {
                         heroSection.style.display = 'none';
                         gameSection.style.display = 'block';
                     }
 
-                    // Fonction pour démarrer une bataille
                     async function startNewBattle() {
                         try {
-                            const response = await fetch('/game/start'); // PAS /api/game/start
+                            const response = await fetch('/game/start');
                             const data = await response.json();
                             console.log('New battle started:', data);
-                            // TODO: afficher les données dans l'interface
+                            displayGameData(data);
                         } catch (error) {
                             console.error('Error starting new battle:', error);
+                        }
+                    }
+
+                    async function attackEnemy() {
+                        try {
+                            const response = await fetch('/game/attack');
+                            const data = await response.json();
+                            displayGameData(data);
+                            addLogMessage('⚔️ Le héros attaque !');
+                        } catch (error) {
+                            console.error('Erreur:', error);
+                        }
+                    }
+                    async function healHero() {
+                        try {
+                            const response = await fetch('/game/heal');
+                            const data = await response.json();
+                            displayGameData(data);
+                            addLogMessage('💚 Le héros se soigne !');
+                        } catch (error) {
+                            console.error('Erreur:', error);
                         }
                     }
 
@@ -112,9 +133,47 @@
                         e.preventDefault();
                         showGameSection();
                     });
-
                     startBattleBtn.addEventListener('click', startNewBattle);
+                    attackBtn.addEventListener('click', attackEnemy);
+                    healBtn.addEventListener('click', healHero);
+
+
+
                 });
+
+                
+
+                // Fonctions en dehors du DOMContentLoaded
+                function displayGameData(data) {
+                    const playerStatsDiv = document.getElementById('player-stats');
+                    const enemyStatsDiv = document.getElementById('enemy-stats');
+
+                    const heroHTML = `
+                                            <p><strong>❤️ PV :</strong> ${data.hero.health} / 100</p>
+                                            <p><strong>⚔️ Attaque :</strong> ${data.hero.attack}</p>
+                                            <p><strong>🛡️ Défense :</strong> ${data.hero.defense}</p>
+                                            <p><strong>⚡ Vitesse :</strong> ${data.hero.speed}</p>
+                                        `;
+
+                    const enemyHTML = `
+                                            <p><strong>❤️ PV :</strong> ${data.enemy.health} / 100</p>
+                                            <p><strong>⚔️ Attaque :</strong> ${data.enemy.attack}</p>
+                                            <p><strong>🛡️ Défense :</strong> ${data.enemy.defense}</p>
+                                            <p><strong>⚡ Vitesse :</strong> ${data.enemy.speed}</p>
+                                        `;
+
+                    playerStatsDiv.innerHTML = heroHTML;
+                    enemyStatsDiv.innerHTML = enemyHTML;
+                }
+
+
+
+                function addLogMessage(message) {
+                    const logDiv = document.getElementById('log-messages');
+                    const newMessage = document.createElement('p');
+                    newMessage.textContent = message;
+                    logDiv.appendChild(newMessage);
+                }
             </script>
            
     </body>

@@ -11,6 +11,7 @@ namespace BattleGame.Models
         public int Defense { get; set; }
         public int Speed { get; set; }
         public string SpecialAbility { get; set; }
+
         public Enemy(int id, string name, int health, int attack, int defense, int speed, string specialAbility)
 
         {

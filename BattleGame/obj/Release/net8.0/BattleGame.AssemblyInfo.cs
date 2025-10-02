@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BattleGame")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a3b56a44ac63aeadb618f3f48cb7aea87f5115d6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+49b88f30733024a1fa0031237f049e188236b936")]
 [assembly: System.Reflection.AssemblyProductAttribute("BattleGame")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BattleGame")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
